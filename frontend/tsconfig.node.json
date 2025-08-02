@@ -1,18 +1,25 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ES2020",
-    "lib": ["ES2020"],
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
-    "allowJs": true,
-    "outDir": "dist",
-    "resolveJsonModule": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
     "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": false
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
   },
-  "include": ["scripts", "node", "**/*.ts"],
-  "exclude": ["node_modules", "dist", "build"]
+  "include": ["vite.config.ts"]
 }
