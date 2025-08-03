@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from app.services.cleaning import clean_csv
 import os
+
 router = APIRouter()
 
 class CleanRequest(BaseModel):
@@ -10,4 +11,7 @@ class CleanRequest(BaseModel):
 @router.post("/clean_data")
 def clean_data(req: CleanRequest):
     cleaned_path = clean_csv(req.filename)
-    return {"message": "Data cleaned", "cleaned_filename": os.path.basename(cleaned_path)}
+    return {
+        "message": "Data cleaned successfully with outlier handling (IQR + Isolation Forest)",
+        "cleaned_filename": os.path.basename(cleaned_path)
+    }

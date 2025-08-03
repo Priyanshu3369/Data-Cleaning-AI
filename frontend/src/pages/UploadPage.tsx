@@ -51,7 +51,7 @@ export default function UploadPage() {
       const cleanedName = res.data.cleaned_filename;
       setCleanedFileName(cleanedName);
 
-      // Get preview of cleaned file
+      // Get preview of cleaned data
       const previewRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/preview_cleaned/${cleanedName}`);
       setCleanedData(previewRes.data.rows);
     } catch (err) {
@@ -62,16 +62,16 @@ export default function UploadPage() {
 
   return (
     <div className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Upload Your CSV</h1>
+      <h1 className="text-3xl font-bold mb-4">🧹 Data Cleaning Tool</h1>
 
       <input
         type="file"
         accept=".csv"
         onChange={handleFileChange}
-        className="mb-4"
+        className="mb-4 block"
       />
 
-      <div className="space-x-4 mb-6">
+      <div className="flex gap-4">
         <button
           onClick={handleUpload}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -87,9 +87,10 @@ export default function UploadPage() {
         </button>
       </div>
 
+      {/* CSV Preview */}
       {csvData.length > 0 && (
-        <div className="mt-6 overflow-auto">
-          <h2 className="font-semibold mb-2">📄 CSV Preview (First 10 Rows):</h2>
+        <div className="mt-8 overflow-auto">
+          <h2 className="font-semibold mb-2 text-lg">📄 Original CSV Preview:</h2>
           <table className="min-w-full text-sm border">
             <thead className="bg-gray-100">
               <tr>
@@ -115,9 +116,10 @@ export default function UploadPage() {
         </div>
       )}
 
+      {/* Cleaned Data Preview */}
       {cleanedData.length > 0 && (
-        <div className="mt-10 overflow-auto">
-          <h2 className="font-semibold mb-2 text-green-700">✅ Cleaned Data Preview (First 10 Rows):</h2>
+        <div className="mt-12 overflow-auto">
+          <h2 className="font-semibold mb-2 text-lg">✅ Cleaned Data Preview:</h2>
           <table className="min-w-full text-sm border">
             <thead className="bg-green-100">
               <tr>
@@ -143,8 +145,8 @@ export default function UploadPage() {
 
           <a
             href={`${import.meta.env.VITE_API_BASE_URL}/download_cleaned/${cleanedFileName}`}
-            className="inline-block mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
             download
+            className="inline-block mt-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
           >
             ⬇ Download Cleaned CSV
           </a>
