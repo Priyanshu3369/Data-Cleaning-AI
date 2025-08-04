@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Papa from "papaparse";
 import axios from "axios";
+import SummaryChart from "@/components/SummaryChart";
 
 export default function UploadPage() {
   const [csvData, setCsvData] = useState<any[]>([]);
@@ -17,7 +18,7 @@ export default function UploadPage() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          setCsvData(results.data.slice(0, 10)); // preview first 10 rows
+          setCsvData(results.data.slice(0, 10)); // Preview first 10 rows
         },
       });
     }
@@ -25,6 +26,7 @@ export default function UploadPage() {
 
   const handleUpload = async () => {
     if (!file) return;
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -34,15 +36,16 @@ export default function UploadPage() {
           "Content-Type": "multipart/form-data",
         },
       });
-      alert("CSV uploaded successfully!");
+      alert("✅ CSV uploaded successfully!");
     } catch (err) {
-      alert("Upload failed.");
+      alert("❌ Upload failed.");
       console.error(err);
     }
   };
 
   const handleClean = async () => {
     if (!file) return;
+
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/clean_data`, {
         filename: file.name,
@@ -51,11 +54,10 @@ export default function UploadPage() {
       const cleanedName = res.data.cleaned_filename;
       setCleanedFileName(cleanedName);
 
-      // Get preview of cleaned data
       const previewRes = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/preview_cleaned/${cleanedName}`);
       setCleanedData(previewRes.data.rows);
     } catch (err) {
-      alert("Cleaning failed.");
+      alert("❌ Cleaning failed.");
       console.error(err);
     }
   };
@@ -150,6 +152,14 @@ export default function UploadPage() {
           >
             ⬇ Download Cleaned CSV
           </a>
+        </div>
+      )}
+
+      {/* Summary Chart */}
+      {cleanedFileName && (
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold mb-2">📊 Data Cleaning Summary:</h2>
+          <SummaryChart filename={cleanedFileName} />
         </div>
       )}
     </div>
